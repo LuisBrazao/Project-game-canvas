@@ -1,39 +1,25 @@
+const image = new Image();
+image.src = './images/standing-right.png';
 class Player {
-    constructor() {
-        this.height = 40;
+    constructor(x, y) {
+        this.height = 41;
         this.width = 40;
-        this.x = 400;
-        this.y = 30;
+        this.x = x;
+        this.y = y;
         this.vx = 0;
         this.vy = 1;
-        this.color = "green";
         this.jumping = false;
+        this.image = image;
+        this.coins = 0;
     }
 
-    draw() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+    update() {
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 
-    moveCar(keyCode) {
-        ctx.clearRect(this.x, this.y, this.width, this.height);
-        switch (keyCode) {
-            case 37:
-                //Making sure car doesn't go off the road
-                this.vx = -5;
-                break;
-            case 39:
-                //Making sure car doesn't go off the road
-                this.vx = 5;
-                break;
-            case 32:
-                if (this.jumping === false) {
-                    this.userPull = 1;
-                    this.jumping = true;
-                } else {
-                    this.userPull = 0;
-                }
-                break;
-        }
+    setImage(src){
+        this.image.src = src;
     }
+
+
 }

@@ -1,7 +1,9 @@
 class Game {
-    constructor() {
+    constructor(index) {
         this.player = {},
-        this.platforms = [];
         this.score = 0;
+        this.map = {};
+        this.currentSection = index;
+        this.status = true;
     }
 }
