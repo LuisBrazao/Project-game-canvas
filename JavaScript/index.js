@@ -58,6 +58,7 @@ function startGame() {
     currentMap = getMap(currentGame.currentSection);
     currentPlayer = new Player(currentMap.startingPointX, currentMap.startingPointY);
     currentGame.player = currentPlayer;
+    console.log("ola");
     currentGame.player.update();
     currentGame.map = currentMap;
     updateCanvas();
