@@ -53,28 +53,15 @@ startGame();
 
 function startGame() {
     //Instantiate a new game of the game class
-    currentGame = new Game(1);
+    currentGame = new Game(0);
     //Instantiate a new car
     currentMap = getMap(currentGame.currentSection);
     currentPlayer = new Player(currentMap.startingPointX, currentMap.startingPointY);
     currentGame.player = currentPlayer;
-    console.log("ola");
     currentGame.player.update();
     currentGame.map = currentMap;
     updateCanvas();
 }
-
-
-function hitBottom() {
-    let rockBottom = myCanvas.height - currentGame.player.radius;
-    if (currentGame.player.y > rockBottom) {
-        currentGame.player.y = rockBottom;
-        currentGame.player.vy = 0;
-        this.jumping = false;
-    }
-
-}
-
 
 function checkDoor() {
     if (!((currentPlayer.y > currentMap.door.y + currentMap.door.height) ||
@@ -96,9 +83,9 @@ function detectOnTop(obstacle) {
         currentGame.player.x + currentGame.player.width > obstacle.x &&
         currentGame.player.x < obstacle.x + obstacle.width &&
         currentGame.player.y < obstacle.y + obstacle.height) {
-        currentGame.player.y = obstacle.y - currentGame.player.height;
-        currentGame.player.vy = 0;
-        currentGame.player.jumping = false;
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -150,25 +137,23 @@ function catchCoin(coin) {
             (currentPlayer.x + currentPlayer.width < coin.x) ||
             (currentPlayer.x > coin.x + coin.width) ||
             (currentPlayer.y + currentPlayer.height < coin.y))) {
-        currentMap.coins.splice(coin.index, coin.index + 1);
+        currentMap.coins.splice(coin.index, 1);
         currentPlayer.coins++;
-        alteredMap1[currentGame.currentSection].coins.splice(coin.index, coin.index + 1)
+        alteredMap1[currentGame.currentSection].coins.splice(coin.index, 1)
+        for (let i = 0; i < currentGame.map.coins.length; i++) {
+            currentGame.map.coins[i].index = i;
+        }
     }
 }
 
 function isOver() {
-    if (currentPlayer.coins === alteredMap1[2]) {
+    if (currentPlayer.coins === alteredMap1[alteredMap1.length-1]) {
         currentGame.status = false;
     }
 }
 
-
-
-
 function updateCanvas() {
-    console.log('aqui')
     frame++;
-    hitBottom();
     ctx.clearRect(0, 0, 800, 700);
     if (controller.up && currentGame.player.jumping === false) {
         currentGame.player.vy -= 50;
@@ -189,19 +174,15 @@ function updateCanvas() {
     currentGame.player.vx *= 0.9; // friction
     currentGame.player.vy *= 0.9; // friction
 
-    // if currentGame.player is falling below floor line
-    if (currentGame.player.y + currentGame.player.height > myCanvas.height) {
-        currentGame.player.jumping = false;
-        currentGame.player.y = myCanvas.height - currentGame.player.height;
-        currentGame.player.vy = 0;
-
-    }
-
 
     for (let i = 0; i < currentGame.map.platforms.length; i++) {
         currentGame.map.platforms[i].draw();
-        collisionTop(currentGame.map.platforms[i]);
-        detectOnTop(currentGame.map.platforms[i]);
+        collisionTop(currentGame.map.platforms[i])
+        if (detectOnTop(currentGame.map.platforms[i])) {
+            currentGame.player.jumping = false;
+            currentGame.player.y = currentGame.map.platforms[i].y - currentGame.player.height;
+            currentGame.player.vy = 0;
+        }
         collisionLeft(currentGame.map.platforms[i]);
         collisionRight(currentGame.map.platforms[i]);
     }
@@ -220,9 +201,9 @@ function updateCanvas() {
     currentGame.player.update();
     window.addEventListener("keydown", controller.keyListener)
     window.addEventListener("keyup", controller.keyListener);
-    if(currentGame.status){
+    if (currentGame.status) {
         requestAnimationFrame(updateCanvas);
-    }else{
+    } else {
         ctx.clearRect(0, 0, 800, 700);
     }
 }
