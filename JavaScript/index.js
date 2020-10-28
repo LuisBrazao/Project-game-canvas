@@ -10,6 +10,13 @@ const ctx = myCanvas.getContext('2d');
 alteredMap1 = map1;
 alteredMap2 = map2;
 
+document.getElementById("start-playing").addEventListener('click', () => {
+    document.getElementById("wrapper").style.display = "none";
+    document.getElementById("wrapper-level1").style.display = "block";
+    document.getElementById("wrapper-level2").style.display = "block";
+
+})
+
 document.getElementById("start-level1").addEventListener('click', () => {
     myCanvas.style.display = "block";
     document.getElementById("start-level1").style.display = "none";
@@ -194,7 +201,7 @@ function isOver() {
         myCanvas.style.display = "none";
         getScores();
         document.getElementById("scores").style.display = "block";
-        document.getElementById("start-level1").style.display = "none";
+        document.getElementById("start-level1").style.display = "block";
     }
 }
 

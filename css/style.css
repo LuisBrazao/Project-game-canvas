@@ -1,6 +1,163 @@
-canvas{
+canvas {
     border: 1px solid red;
     background-image: url("../images/backgrounds/background.gif");
     background-size: cover;
     background-repeat: no-repeat;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.maps {
+    padding-top: 50px;
+}
+
+
+
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+.wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.wrapper .link_wrapper {
+    position: relative;
+}
+
+.wrapper a {
+    display: block;
+    width: 250px;
+    height: 50px;
+    line-height: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    background: #333;
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 3px solid #333;
+    transition: all .35s;
+}
+
+.wrapper .icon {
+    width: 50px;
+    height: 50px;
+    border: 3px solid transparent;
+    position: absolute;
+    transform: rotate(45deg);
+    right: 0;
+    top: 0;
+    z-index: -1;
+    transition: all .35s;
+}
+
+.wrapper .icon svg {
+    width: 30px;
+    position: absolute;
+    top: calc(50% - 15px);
+    left: calc(50% - 15px);
+    transform: rotate(-45deg);
+    fill: #2ecc71;
+    transition: all .35s;
+}
+
+.wrapper a:hover {
+    text-decoration: none;
+    width: 200px;
+    border: 3px solid #2ecc71;
+    background: transparent;
+    color: #2ecc71;
+}
+
+.wrapper a:hover+.icon {
+    text-decoration: none;
+    border: 3px solid #2ecc71;
+    right: -25%;
+}
+
+.wrapper-level1 a {
+    display: block;
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-family: sans-serif;
+    text-decoration: none;
+    color: #333;
+    border: 2px solid #333;
+    letter-spacing: 2px;
+    text-align: center;
+    position: relative;
+    transition: all .35s;
+}
+
+.wrapper-level1 a span {
+    position: relative;
+    z-index: 2;
+}
+
+.wrapper-level1 a:after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #ff003b;
+    transition: all .35s;
+}
+
+.wrapper-level1 a:hover {
+    color: #fff;
+}
+
+.wrapper-level1 a:hover:after {
+    width: 100%;
+}
+
+.wrapper-level2 a {
+    display: block;
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-family: sans-serif;
+    text-decoration: none;
+    color: #333;
+    border: 2px solid #333;
+    letter-spacing: 2px;
+    text-align: center;
+    position: relative;
+    transition: all .35s;
+}
+
+.wrapper-level2 a span {
+    position: relative;
+    z-index: 2;
+}
+
+.wrapper-level2 a:after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: green;
+    transition: all .35s;
+}
+
+.wrapper-level2 a:hover {
+    color: #fff;
+}
+
+.wrapper-level2 a:hover:after {
+    width: 100%;
 }
