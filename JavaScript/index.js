@@ -1,9 +1,28 @@
 let currentGame;
 let currentPlayer;
+let currentLevel;
 let id;
 const myCanvas = document.getElementById('canvas');
+myCanvas.style.display = "none";
 const ctx = myCanvas.getContext('2d');
 alteredMap1 = map1;
+alteredMap2 = map2;
+
+document.getElementById("start-level1").addEventListener('click', () => {
+    myCanvas.style.display = "block";
+    startGame(alteredMap1);
+    document.getElementById("start-level1").style.display = "none";
+    document.getElementById("start-level2").style.display = "none";
+})  
+
+document.getElementById("start-level2").addEventListener('click', () => {
+    myCanvas.style.display = "block";
+    startGame(alteredMap2);
+    document.getElementById("start-level2").style.display = "none";
+    document.getElementById("start-level1").style.display = "none";
+})
+
+
 let controller = {
 
     left: false,
@@ -26,10 +45,10 @@ let controller = {
 };
 let frame = 0;
 
-function startMap(number) {
+function startMap(map, number) {
     let platformArray = [];
     let coinsArray = [];
-    let myData = alteredMap1;
+    let myData = map;
     for (let i = 0; i < myData[number].platforms.length; i++) {
         let platform = new Platform(myData[number].platforms[i][0], myData[number].platforms[i][1], myData[number].platforms[i][2], myData[number].platforms[i][3]);
         platformArray.push(platform);
@@ -45,17 +64,15 @@ function startMap(number) {
 
 
 
-function getMap(number) {
-    return startMap(number)
+function getMap(map, number) {
+    return startMap(map, number)
 }
 
-startGame();
-
-function startGame() {
+function startGame(map) {
     //Instantiate a new game of the game class
     currentGame = new Game(0);
-    //Instantiate a new car
-    currentMap = getMap(currentGame.currentSection);
+    currentLevel = map;
+    currentMap = getMap(map, currentGame.currentSection);
     currentPlayer = new Player(currentMap.startingPointX, currentMap.startingPointY);
     currentGame.player = currentPlayer;
     currentGame.player.update();
@@ -69,7 +86,7 @@ function checkDoor() {
             (currentPlayer.x > currentMap.door.x + currentMap.door.width) ||
             (currentPlayer.y + currentPlayer.height < currentMap.door.y))) {
         currentGame.currentSection = currentMap.door.index;
-        currentMap = getMap(currentGame.currentSection);
+        currentMap = getMap(currentLevel, currentGame.currentSection);
         currentPlayer.x = currentMap.startingPointX
         currentPlayer.y = currentMap.startingPointY;
         currentGame.player.update();
@@ -140,6 +157,8 @@ function catchCoin(coin) {
         currentMap.coins.splice(coin.index, 1);
         currentPlayer.coins++;
         alteredMap1[currentGame.currentSection].coins.splice(coin.index, 1)
+        let audio = new Audio('./Sounds/coin.wav');
+        audio.play();
         for (let i = 0; i < currentGame.map.coins.length; i++) {
             currentGame.map.coins[i].index = i;
         }
@@ -147,7 +166,7 @@ function catchCoin(coin) {
 }
 
 function isOver() {
-    if (currentPlayer.coins === alteredMap1[alteredMap1.length-1]) {
+    if (currentPlayer.coins === alteredMap1[alteredMap1.length - 1]) {
         currentGame.status = false;
     }
 }

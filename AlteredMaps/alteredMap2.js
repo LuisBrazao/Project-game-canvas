@@ -1,0 +1,1 @@
+let alteredMap2 = [];
