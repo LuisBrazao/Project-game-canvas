@@ -2,6 +2,8 @@ let currentGame;
 let currentPlayer;
 let currentLevel;
 let id;
+let startTime;
+let endTime;
 const myCanvas = document.getElementById('canvas');
 myCanvas.style.display = "none";
 const ctx = myCanvas.getContext('2d');
@@ -10,18 +12,20 @@ alteredMap2 = map2;
 
 document.getElementById("start-level1").addEventListener('click', () => {
     myCanvas.style.display = "block";
-    startGame(alteredMap1);
     document.getElementById("start-level1").style.display = "none";
     document.getElementById("start-level2").style.display = "none";
     document.getElementById("scores").style.display = "none";
-})  
+    startGame(alteredMap1);
+
+})
 
 document.getElementById("start-level2").addEventListener('click', () => {
     myCanvas.style.display = "block";
-    startGame(alteredMap2);
     document.getElementById("start-level2").style.display = "none";
     document.getElementById("start-level1").style.display = "none";
     document.getElementById("scores").style.display = "none";
+    startGame(alteredMap2);
+
 })
 
 
@@ -76,6 +80,7 @@ function getMap(map, number) {
 
 function startGame(map) {
     //Instantiate a new game of the game class
+    startTime = new Date().getTime();
     currentGame = new Game(0);
     currentLevel = map;
     currentMap = getMap(map, currentGame.currentSection);
@@ -94,18 +99,18 @@ function checkDoor(door) {
         let oldIndex = currentGame.currentSection;
         currentGame.currentSection = door.index;
         currentMap = getMap(currentLevel, currentGame.currentSection);
-        if(oldIndex<currentGame.currentSection){
+        if (oldIndex < currentGame.currentSection) {
             currentPlayer.x = currentMap.startingPointX
             currentPlayer.y = currentMap.startingPointY;
             currentGame.player.update();
             currentGame.map = currentMap;
-        }else{
+        } else {
             currentPlayer.x = currentMap.secondPointX
             currentPlayer.y = currentMap.secondPointY;
             currentGame.player.update();
             currentGame.map = currentMap;
         }
-        
+
     }
 }
 
@@ -183,6 +188,12 @@ function catchCoin(coin) {
 function isOver() {
     if (currentPlayer.coins === alteredMap1[alteredMap1.length - 1]) {
         currentGame.status = false;
+        endTime = new Date().getTime();
+        let time = endTime - startTime;
+        addScore("Bernardo", 1, time, currentPlayer.coins);
+        myCanvas.style.display = "none";
+        getScores();
+        document.getElementById("scores").style.display = "block";
     }
 }
 
