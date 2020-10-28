@@ -13,6 +13,7 @@ document.getElementById("start-level1").addEventListener('click', () => {
     startGame(alteredMap1);
     document.getElementById("start-level1").style.display = "none";
     document.getElementById("start-level2").style.display = "none";
+    document.getElementById("scores").style.display = "none";
 })  
 
 document.getElementById("start-level2").addEventListener('click', () => {
@@ -20,6 +21,7 @@ document.getElementById("start-level2").addEventListener('click', () => {
     startGame(alteredMap2);
     document.getElementById("start-level2").style.display = "none";
     document.getElementById("start-level1").style.display = "none";
+    document.getElementById("scores").style.display = "none";
 })
 
 
@@ -48,6 +50,7 @@ let frame = 0;
 function startMap(map, number) {
     let platformArray = [];
     let coinsArray = [];
+    let doorsArray = [];
     let myData = map;
     for (let i = 0; i < myData[number].platforms.length; i++) {
         let platform = new Platform(myData[number].platforms[i][0], myData[number].platforms[i][1], myData[number].platforms[i][2], myData[number].platforms[i][3]);
@@ -57,8 +60,11 @@ function startMap(map, number) {
         let coin = new Coin(myData[number].coins[i][0], myData[number].coins[i][1], myData[number].coins[i][2], myData[number].coins[i][3], i);
         coinsArray.push(coin);
     }
-    let door = new Door(myData[number].door[0], myData[number].door[1], myData[number].door[2], myData[number].door[3], myData[number].door[4])
-    let newMap = new MapLayout(myData[number].x, myData[number].y, platformArray, coinsArray, door);
+    for (let i = 0; i < myData[number].doors.length; i++) {
+        let door = new Door(myData[number].doors[i][0], myData[number].doors[i][1], myData[number].doors[i][2], myData[number].doors[i][3], myData[number].doors[i][4])
+        doorsArray.push(door);
+    }
+    let newMap = new MapLayout(myData[number].x, myData[number].y, myData[number].secondX, myData[number].secondY, platformArray, coinsArray, doorsArray);
     return newMap;
 }
 
@@ -80,17 +86,26 @@ function startGame(map) {
     updateCanvas();
 }
 
-function checkDoor() {
-    if (!((currentPlayer.y > currentMap.door.y + currentMap.door.height) ||
-            (currentPlayer.x + currentPlayer.width < currentMap.door.x) ||
-            (currentPlayer.x > currentMap.door.x + currentMap.door.width) ||
-            (currentPlayer.y + currentPlayer.height < currentMap.door.y))) {
-        currentGame.currentSection = currentMap.door.index;
+function checkDoor(door) {
+    if (!((currentPlayer.y > door.y + door.height) ||
+            (currentPlayer.x + currentPlayer.width < door.x) ||
+            (currentPlayer.x > door.x + door.width) ||
+            (currentPlayer.y + currentPlayer.height < door.y))) {
+        let oldIndex = currentGame.currentSection;
+        currentGame.currentSection = door.index;
         currentMap = getMap(currentLevel, currentGame.currentSection);
-        currentPlayer.x = currentMap.startingPointX
-        currentPlayer.y = currentMap.startingPointY;
-        currentGame.player.update();
-        currentGame.map = currentMap;
+        if(oldIndex<currentGame.currentSection){
+            currentPlayer.x = currentMap.startingPointX
+            currentPlayer.y = currentMap.startingPointY;
+            currentGame.player.update();
+            currentGame.map = currentMap;
+        }else{
+            currentPlayer.x = currentMap.secondPointX
+            currentPlayer.y = currentMap.secondPointY;
+            currentGame.player.update();
+            currentGame.map = currentMap;
+        }
+        
     }
 }
 
@@ -215,7 +230,11 @@ function updateCanvas() {
         catchCoin(currentGame.map.coins[i]);
     }
 
-    checkDoor();
+    for (let i = 0; i < currentGame.map.door.length; i++) {
+        currentGame.map.door[i].draw();
+        checkDoor(currentGame.map.door[i]);
+    }
+
     isOver();
     currentGame.player.update();
     window.addEventListener("keydown", controller.keyListener)
