@@ -194,6 +194,7 @@ function isOver() {
         myCanvas.style.display = "none";
         getScores();
         document.getElementById("scores").style.display = "block";
+        document.getElementById("start-level1").style.display = "none";
     }
 }
 
@@ -216,8 +217,8 @@ function updateCanvas() {
     currentGame.player.vy += 2; // gravity
     currentGame.player.x += currentGame.player.vx;
     currentGame.player.y += currentGame.player.vy;
-    currentGame.player.vx *= 0.9; // friction
-    currentGame.player.vy *= 0.9; // friction
+    currentGame.player.vx *= 0.7; // friction
+    currentGame.player.vy *= 0.85; // friction
 
 
     for (let i = 0; i < currentGame.map.platforms.length; i++) {
