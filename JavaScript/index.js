@@ -7,15 +7,24 @@ let endTime;
 let level = 0;
 const myCanvas = document.getElementById('canvas');
 myCanvas.style.display = "none";
-let alteredMap1 = [];
 const ctx = myCanvas.getContext('2d');
+let alteredMap1 = [];
 for (let i = 0; i < map1.length; i++) {
-    let newObject = {
-        ...map1[i]
+    let newObject = Object.assign({}, map1[i]);
+    let newCoins = [];
+    if ("coins" in newObject) {
+        for (let i = 0; i < newObject.coins.length; i++) {
+            let newCoin = [...newObject.coins[i]];
+            newCoins.push(newCoin);
+        }
+        newObject.coins = newCoins;
+        alteredMap1.push(newObject);
+    } else if ("total" in newObject) {
+        alteredMap1.push(newObject);
     }
-    alteredMap1.push(newObject);
+
 }
-console.log(alteredMap1)
+
 document.getElementById("start-playing").addEventListener('click', () => {
     document.getElementById("wrapper").style.display = "none";
     document.getElementById("wrapper-level1").style.display = "block";
@@ -199,15 +208,23 @@ function catchCoin(coin) {
 }
 
 function isOver() {
-    if (currentPlayer.coins === alteredMap1[alteredMap1.length-1].total) {
+    if (currentPlayer.coins === alteredMap1[alteredMap1.length - 1].total) {
         currentGame.status = false;
+        alteredMap1 = [];
         for (let i = 0; i < map1.length; i++) {
-            let newObject = {
-                ...map1[i]
+            let newObject = Object.assign({}, map1[i]);
+            let newCoins = [];
+            if ("coins" in newObject) {
+                for (let i = 0; i < newObject.coins.length; i++) {
+                    let newCoin = [...newObject.coins[i]];
+                    newCoins.push(newCoin);
+                }
+                newObject.coins = newCoins;
+                alteredMap1.push(newObject);
+            } else if ("total" in newObject) {
+                alteredMap1.push(newObject);
             }
-            alteredMap1.push(newObject);
         }
-        console.log(map1);
         endTime = new Date().getTime();
         let time = endTime - startTime;
         let person = prompt("Please enter your name", "");
