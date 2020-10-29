@@ -1,4 +1,5 @@
 function getScores() {
+    let length = 10;
     let individualScore = JSON.parse(localStorage.getItem('score'));
     let sortedList = individualScore.score.sort((a, b) => {
         if (a[3] - b[3] === 0) {
@@ -7,8 +8,10 @@ function getScores() {
             return a[3] - b[3];
         }
     })
-    console.log(sortedList);
-    for (let i = 0; i < sortedList.length; i++) {
+    if(sortedList.length<10){
+        length = sortedList.length;
+    }
+    for (let i = 0; i < length; i++) {
         let name = sortedList[i][0];
         let level = sortedList[i][1];
         let time = millisToMinutesAndSeconds(sortedList[i][2]);

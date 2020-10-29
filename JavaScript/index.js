@@ -4,12 +4,18 @@ let currentLevel;
 let id;
 let startTime;
 let endTime;
+let level = 0;
 const myCanvas = document.getElementById('canvas');
 myCanvas.style.display = "none";
+let alteredMap1 = [];
 const ctx = myCanvas.getContext('2d');
-alteredMap1 = map1;
-alteredMap2 = map2;
-
+for (let i = 0; i < map1.length; i++) {
+    let newObject = {
+        ...map1[i]
+    }
+    alteredMap1.push(newObject);
+}
+console.log(alteredMap1)
 document.getElementById("start-playing").addEventListener('click', () => {
     document.getElementById("wrapper").style.display = "none";
     document.getElementById("wrapper-level1").style.display = "block";
@@ -23,7 +29,7 @@ document.getElementById("start-level1").addEventListener('click', () => {
     document.getElementById("start-level2").style.display = "none";
     document.getElementById("scores").style.display = "none";
     startGame(alteredMap1);
-
+    level = 1;
 })
 
 document.getElementById("start-level2").addEventListener('click', () => {
@@ -32,7 +38,7 @@ document.getElementById("start-level2").addEventListener('click', () => {
     document.getElementById("start-level1").style.display = "none";
     document.getElementById("scores").style.display = "none";
     startGame(alteredMap2);
-
+    level = 2;
 })
 
 
@@ -183,7 +189,7 @@ function catchCoin(coin) {
             (currentPlayer.y + currentPlayer.height < coin.y))) {
         currentMap.coins.splice(coin.index, 1);
         currentPlayer.coins++;
-        alteredMap1[currentGame.currentSection].coins.splice(coin.index, 1)
+        alteredMap1[currentGame.currentSection].coins.splice(coin.index, 1);
         let audio = new Audio('./Sounds/coin.wav');
         audio.play();
         for (let i = 0; i < currentGame.map.coins.length; i++) {
@@ -193,15 +199,26 @@ function catchCoin(coin) {
 }
 
 function isOver() {
-    if (currentPlayer.coins === alteredMap1[alteredMap1.length - 1]) {
+    if (currentPlayer.coins === alteredMap1[alteredMap1.length-1].total) {
         currentGame.status = false;
+        for (let i = 0; i < map1.length; i++) {
+            let newObject = {
+                ...map1[i]
+            }
+            alteredMap1.push(newObject);
+        }
+        console.log(map1);
         endTime = new Date().getTime();
         let time = endTime - startTime;
-        addScore("Bernardo", 1, time, currentPlayer.coins);
-        myCanvas.style.display = "none";
-        getScores();
-        document.getElementById("scores").style.display = "block";
-        document.getElementById("start-level1").style.display = "block";
+        let person = prompt("Please enter your name", "");
+        if (person != null) {
+            addScore(person, level, time, currentPlayer.coins);
+            myCanvas.style.display = "none";
+            getScores();
+            document.getElementById("scores").style.display = "block";
+            document.getElementById("start-level1").style.display = "block";
+        }
+
     }
 }
 
