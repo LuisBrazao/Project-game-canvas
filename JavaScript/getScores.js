@@ -1,4 +1,5 @@
 function getScores() {
+    document.querySelector("tbody").innerHTML = "";
     let length = 10;
     let individualScore = JSON.parse(localStorage.getItem('score'));
     let sortedList = individualScore.score.sort((a, b) => {
