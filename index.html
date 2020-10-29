@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class="container-fluid" id="logo">
         <div class="row">
             <div class="col-sm-1">
             </div>
@@ -27,54 +27,84 @@
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12">
-                <div class="wrapper" id="wrapper">
-                    <div class="link_wrapper">
-                        <a href="#" id="start-playing">Play Now!</a>
-                        <div class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268.832 268.832">
-                                <path
-                                    d="M265.17 125.577l-80-80c-4.88-4.88-12.796-4.88-17.677 0-4.882 4.882-4.882 12.796 0 17.678l58.66 58.66H12.5c-6.903 0-12.5 5.598-12.5 12.5 0 6.903 5.597 12.5 12.5 12.5h213.654l-58.66 58.662c-4.88 4.882-4.88 12.796 0 17.678 2.44 2.44 5.64 3.66 8.84 3.66s6.398-1.22 8.84-3.66l79.997-80c4.883-4.882 4.883-12.796 0-17.678z" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <canvas id="canvas" height="700" width="800"></canvas>
+            <div class="col-3"></div>
+            <div class="col-4">
+                <button class="my-button my-button--stripe" id="start-playing">Play now!</button>
+            </div>
+            <div class="col-4">
+                <button class="my-button my-button--stripe" id="show-leaderboards">Leaderboards</button>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>
+    <div class="container-fuild">
+        <div class="row">
+            <div class="col-12">
+                <canvas id="canvas" height="700" width="800" style="visibility: hidden;"></canvas>
             </div>
         </div>
     </div>
-    <div class="container-fluid maps">
+    <div class="container-fluid buttons">
         <div class="row">
             <div class="col-3">
             </div>
-            <div class="col-4">
-                <div class="wrapper-level1" id="wrapper-level1" style="display: none;">
-                    <a href="#" id="start-level1"><span>Map 1</span></a>
+            <div class="col-2" id="map-btn map-level1">
+                <div class="wrapper-level1" id="wrapper-level1" style="visibility: hidden;">
+                    <a href="#" id="start-level1"><span>1, 2, 3, 4</span></a>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="wrapper-level2" id="wrapper-level2" style="display: none;">
-                    <a href="#" id="start-level2"><span>Map 2</span></a>
+            <div class="col-2">
+                <div id="retry" style="visibility: hidden;"><h2>TRY AGAIN?</h2></div>
+            </div>
+            <div class="col-4" id="map-btn map-level2">
+                <div class="wrapper-level2" id="wrapper-level2" style="visibility: hidden;">
+                    <a href="#" id="start-level2"><span>The V's</span></a>
                 </div>
             </div>
             <div class="col-1">
             </div>
         </div>
     </div>
-
-    <table class="table table-striped" id="scores" style="display: none">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Level</th>
-                <th scope="col">Time</th>
-                <th scope="col">Coins</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-
+    <div class="container-fluid maps">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-4">
+                <div id="scores-level1" style="visibility: hidden">
+                <h2>1, 2, 3, 4</h2>
+                <table class="table-sm table-striped table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Level</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Coins</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            <div class="col-4">
+                <div id="scores-level2" style="visibility: hidden">
+                <h2>The V's</h2>
+                <table class="table-sm table-striped table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Level</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Coins</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>

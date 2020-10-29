@@ -6,7 +6,7 @@ let startTime;
 let endTime;
 let level = 0;
 const myCanvas = document.getElementById('canvas');
-myCanvas.style.display = "none";
+myCanvas.style.visibility = "hidden";
 const ctx = myCanvas.getContext('2d');
 let alteredMap1 = [];
 for (let i = 0; i < map1.length; i++) {
@@ -25,27 +25,66 @@ for (let i = 0; i < map1.length; i++) {
 
 }
 
+let alteredMap2 = [];
+for (let i = 0; i < map2.length; i++) {
+    let newObject = Object.assign({}, map2[i]);
+    let newCoins = [];
+    if ("coins" in newObject) {
+        for (let i = 0; i < newObject.coins.length; i++) {
+            let newCoin = [...newObject.coins[i]];
+            newCoins.push(newCoin);
+        }
+        newObject.coins = newCoins;
+        alteredMap2.push(newObject);
+    } else if ("total" in newObject) {
+        alteredMap2.push(newObject);
+    }
+
+}
+
+
+
+
 document.getElementById("start-playing").addEventListener('click', () => {
-    document.getElementById("wrapper").style.display = "none";
-    document.getElementById("wrapper-level1").style.display = "block";
-    document.getElementById("wrapper-level2").style.display = "block";
+    document.getElementById("wrapper-level1").style.visibility = "visible";
+    document.getElementById("wrapper-level2").style.visibility = "visible";
+    document.getElementById("scores-level1").style.visibility = "hidden";
+    document.getElementById("scores-level2").style.visibility = "hidden";
 
 })
 
+document.getElementById("show-leaderboards").addEventListener('click', () => {
+    document.getElementById("scores-level1").style.visibility = "visible";
+    document.getElementById("scores-level2").style.visibility = "visible";
+    document.getElementById("wrapper-level1").style.visibility = "hidden";
+    document.getElementById("wrapper-level2").style.visibility = "hidden";
+    getScores();
+})
+
 document.getElementById("start-level1").addEventListener('click', () => {
-    myCanvas.style.display = "block";
-    document.getElementById("start-level1").style.display = "none";
-    document.getElementById("start-level2").style.display = "none";
-    document.getElementById("scores").style.display = "none";
+    myCanvas.style.visibility = "visible";
+    document.getElementById("start-playing").style.visibility = "hidden";
+    document.getElementById("show-leaderboards").style.visibility = "hidden";
+    document.getElementById("retry").style.visibility = "hidden";
+    document.getElementById("wrapper-level1").style.visibility = "hidden";
+    document.getElementById("wrapper-level2").style.visibility = "hidden";
+    document.getElementById("scores-level1").style.visibility = "hidden";
+    document.getElementById("scores-level2").style.visibility = "hidden";
+    document.getElementById("logo").style.visibility = "hidden";
     startGame(alteredMap1);
     level = 1;
 })
 
 document.getElementById("start-level2").addEventListener('click', () => {
-    myCanvas.style.display = "block";
-    document.getElementById("start-level2").style.display = "none";
-    document.getElementById("start-level1").style.display = "none";
-    document.getElementById("scores").style.display = "none";
+    myCanvas.style.visibility = "visible";
+    document.getElementById("start-playing").style.visibility = "hidden";
+    document.getElementById("show-leaderboards").style.visibility = "hidden";
+    document.getElementById("retry").style.visibility = "hidden";
+    document.getElementById("wrapper-level2").style.visibility = "hidden";
+    document.getElementById("wrapper-level1").style.visibility = "hidden";
+    document.getElementById("scores-level1").style.visibility = "hidden";
+    document.getElementById("scores-level2").style.visibility = "hidden";
+    document.getElementById("logo").style.visibility = "hidden";
     startGame(alteredMap2);
     level = 2;
 })
@@ -196,9 +235,11 @@ function catchCoin(coin) {
             (currentPlayer.x + currentPlayer.width < coin.x) ||
             (currentPlayer.x > coin.x + coin.width) ||
             (currentPlayer.y + currentPlayer.height < coin.y))) {
+                console.log(coin);
+                console.log(currentPlayer);
         currentMap.coins.splice(coin.index, 1);
         currentPlayer.coins++;
-        alteredMap1[currentGame.currentSection].coins.splice(coin.index, 1);
+        currentLevel[currentGame.currentSection].coins.splice(coin.index, 1);
         let audio = new Audio('./Sounds/coin.wav');
         audio.play();
         for (let i = 0; i < currentGame.map.coins.length; i++) {
@@ -208,7 +249,14 @@ function catchCoin(coin) {
 }
 
 function isOver() {
-    if (currentPlayer.coins === alteredMap1[alteredMap1.length - 1].total) {
+    if (currentPlayer.coins === currentLevel[currentLevel.length - 1].total) {
+        myCanvas.style.visibility = "hidden";
+        document.getElementById("scores-level1").style.visibility = "visible";
+        document.getElementById("scores-level2").style.visibility = "visible";
+        document.getElementById("wrapper-level1").style.visibility = "visible";
+        document.getElementById("wrapper-level2").style.visibility = "visible";
+        document.getElementById("logo").style.visibility = "visible";
+    document.getElementById("retry").style.visibility = "visible";
         currentGame.status = false;
         alteredMap1 = [];
         for (let i = 0; i < map1.length; i++) {
@@ -225,15 +273,29 @@ function isOver() {
                 alteredMap1.push(newObject);
             }
         }
+        alteredMap2 = [];
+        for (let i = 0; i < map2.length; i++) {
+            let newObject = Object.assign({}, map2[i]);
+            let newCoins = [];
+            if ("coins" in newObject) {
+                for (let i = 0; i < newObject.coins.length; i++) {
+                    let newCoin = [...newObject.coins[i]];
+                    newCoins.push(newCoin);
+                }
+                newObject.coins = newCoins;
+                alteredMap2.push(newObject);
+            } else if ("total" in newObject) {
+                alteredMap2.push(newObject);
+            }
+        }
+
         endTime = new Date().getTime();
         let time = endTime - startTime;
         let person = prompt("Please enter your name", "");
         if (person != null) {
             addScore(person, level, time, currentPlayer.coins);
-            myCanvas.style.display = "none";
             getScores();
-            document.getElementById("scores").style.display = "block";
-            document.getElementById("start-level1").style.display = "block";
+
         }
 
     }
@@ -242,6 +304,10 @@ function isOver() {
 function updateCanvas() {
     frame++;
     ctx.clearRect(0, 0, 800, 700);
+    let totalCoins = currentLevel[currentLevel.length - 1].total;
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText(`Coins: ${currentPlayer.coins} / ${totalCoins}`, 600, 50);
     if (controller.up && currentGame.player.jumping === false) {
         currentGame.player.vy -= 50;
         currentGame.player.jumping = true;
@@ -289,6 +355,7 @@ function updateCanvas() {
     }
 
     isOver();
+
     currentGame.player.update();
     window.addEventListener("keydown", controller.keyListener)
     window.addEventListener("keyup", controller.keyListener);

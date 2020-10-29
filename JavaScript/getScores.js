@@ -1,4 +1,4 @@
-function getScores() {
+function getScores(number) {
     document.querySelector("tbody").innerHTML = "";
     let length = 10;
     let individualScore = JSON.parse(localStorage.getItem('score'));
@@ -19,7 +19,11 @@ function getScores() {
         let coins = sortedList[i][3];
         let newRow = document.createElement("tr");
         newRow.innerHTML = `<th scope="row">${name}</th><td>${level}</td><td>${time}</td><td>${coins}</td>`;
-        document.querySelector("tbody").appendChild(newRow);
+        if(level === 1){
+            document.querySelector("#scores-level1 tbody").appendChild(newRow);
+        }else{
+            document.querySelector("#scores-level2 tbody").appendChild(newRow);
+        }
 
     }
 }
