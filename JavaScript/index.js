@@ -235,8 +235,6 @@ function catchCoin(coin) {
             (currentPlayer.x + currentPlayer.width < coin.x) ||
             (currentPlayer.x > coin.x + coin.width) ||
             (currentPlayer.y + currentPlayer.height < coin.y))) {
-                console.log(coin);
-                console.log(currentPlayer);
         currentMap.coins.splice(coin.index, 1);
         currentPlayer.coins++;
         currentLevel[currentGame.currentSection].coins.splice(coin.index, 1);
