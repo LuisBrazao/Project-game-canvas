@@ -6,7 +6,7 @@ let startTime;
 let endTime;
 let level = 0;
 const myCanvas = document.getElementById('canvas');
-myCanvas.style.visibility = "hidden";
+myCanvas.style.display = "none";
 const ctx = myCanvas.getContext('2d');
 let alteredMap1 = [];
 for (let i = 0; i < map1.length; i++) {
@@ -46,45 +46,45 @@ for (let i = 0; i < map2.length; i++) {
 
 
 document.getElementById("start-playing").addEventListener('click', () => {
-    document.getElementById("wrapper-level1").style.visibility = "visible";
-    document.getElementById("wrapper-level2").style.visibility = "visible";
-    document.getElementById("scores-level1").style.visibility = "hidden";
-    document.getElementById("scores-level2").style.visibility = "hidden";
+    document.getElementById("wrapper-level1").style.display = "block";
+    document.getElementById("wrapper-level2").style.display = "block";
+    document.getElementById("scores-level1").style.display = "none";
+    document.getElementById("scores-level2").style.display = "none";
 
 })
 
 document.getElementById("show-leaderboards").addEventListener('click', () => {
-    document.getElementById("scores-level1").style.visibility = "visible";
-    document.getElementById("scores-level2").style.visibility = "visible";
-    document.getElementById("wrapper-level1").style.visibility = "hidden";
-    document.getElementById("wrapper-level2").style.visibility = "hidden";
+    document.getElementById("scores-level1").style.display = "block";
+    document.getElementById("scores-level2").style.display = "block";
+    document.getElementById("wrapper-level1").style.display = "none";
+    document.getElementById("wrapper-level2").style.display = "none";
     getScores();
 })
 
 document.getElementById("start-level1").addEventListener('click', () => {
-    myCanvas.style.visibility = "visible";
-    document.getElementById("start-playing").style.visibility = "hidden";
-    document.getElementById("show-leaderboards").style.visibility = "hidden";
-    document.getElementById("retry").style.visibility = "hidden";
-    document.getElementById("wrapper-level1").style.visibility = "hidden";
-    document.getElementById("wrapper-level2").style.visibility = "hidden";
-    document.getElementById("scores-level1").style.visibility = "hidden";
-    document.getElementById("scores-level2").style.visibility = "hidden";
-    document.getElementById("logo").style.visibility = "hidden";
+    myCanvas.style.display = "block";
+    document.getElementById("start-playing").style.display = "none";
+    document.getElementById("show-leaderboards").style.display = "none";
+    document.getElementById("retry").style.display = "none";
+    document.getElementById("wrapper-level1").style.display = "none";
+    document.getElementById("wrapper-level2").style.display = "none";
+    document.getElementById("scores-level1").style.display = "none";
+    document.getElementById("scores-level2").style.display = "none";
+    document.getElementById("logo").style.display = "none";
     startGame(alteredMap1);
     level = 1;
 })
 
 document.getElementById("start-level2").addEventListener('click', () => {
-    myCanvas.style.visibility = "visible";
-    document.getElementById("start-playing").style.visibility = "hidden";
-    document.getElementById("show-leaderboards").style.visibility = "hidden";
-    document.getElementById("retry").style.visibility = "hidden";
-    document.getElementById("wrapper-level2").style.visibility = "hidden";
-    document.getElementById("wrapper-level1").style.visibility = "hidden";
-    document.getElementById("scores-level1").style.visibility = "hidden";
-    document.getElementById("scores-level2").style.visibility = "hidden";
-    document.getElementById("logo").style.visibility = "hidden";
+    myCanvas.style.display = "block";
+    document.getElementById("start-playing").style.display = "none";
+    document.getElementById("show-leaderboards").style.display = "none";
+    document.getElementById("retry").style.display = "none";
+    document.getElementById("wrapper-level2").style.display = "none";
+    document.getElementById("wrapper-level1").style.display = "none";
+    document.getElementById("scores-level1").style.display = "none";
+    document.getElementById("scores-level2").style.display = "none";
+    document.getElementById("logo").style.display = "none";
     startGame(alteredMap2);
     level = 2;
 })
@@ -249,14 +249,17 @@ function catchCoin(coin) {
 }
 
 function isOver() {
-    if (currentPlayer.coins === currentLevel[currentLevel.length - 1].total) {
-        myCanvas.style.visibility = "hidden";
-        document.getElementById("scores-level1").style.visibility = "visible";
-        document.getElementById("scores-level2").style.visibility = "visible";
-        document.getElementById("wrapper-level1").style.visibility = "visible";
-        document.getElementById("wrapper-level2").style.visibility = "visible";
-        document.getElementById("logo").style.visibility = "visible";
-    document.getElementById("retry").style.visibility = "visible";
+    let currentTime = new Date().getTime();
+    let timeTaken = currentTime - startTime;
+    let minutesTaken = millisToMinutesAndSeconds(timeTaken);
+    if (currentPlayer.coins === currentLevel[currentLevel.length - 1].total || minutesTaken[0] > 0) {
+        myCanvas.style.display = "none";
+        document.getElementById("scores-level1").style.display = "block";
+        document.getElementById("scores-level2").style.display = "block";
+        document.getElementById("wrapper-level1").style.display = "block";
+        document.getElementById("wrapper-level2").style.display = "block";
+        document.getElementById("logo").style.display = "block";
+    document.getElementById("retry").style.display = "block";
         currentGame.status = false;
         alteredMap1 = [];
         for (let i = 0; i < map1.length; i++) {
@@ -307,7 +310,10 @@ function updateCanvas() {
     let totalCoins = currentLevel[currentLevel.length - 1].total;
     ctx.font = "30px Arial";
     ctx.fillStyle = "white";
-    ctx.fillText(`Coins: ${currentPlayer.coins} / ${totalCoins}`, 600, 50);
+    let currentTime = new Date().getTime();
+    let timeTaken = currentTime - startTime;
+    let minutesTaken = millisToMinutesAndSeconds(timeTaken);
+    ctx.fillText(`Time: ${minutesTaken}  Current Section: ${currentGame.currentSection+1} / ${currentLevel.length-1}  Coins: ${currentPlayer.coins} / ${totalCoins}`, 100, 50);
     if (controller.up && currentGame.player.jumping === false) {
         currentGame.player.vy -= 50;
         currentGame.player.jumping = true;

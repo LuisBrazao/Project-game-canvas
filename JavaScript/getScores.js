@@ -1,12 +1,13 @@
-function getScores(number) {
-    document.querySelector("tbody").innerHTML = "";
+function getScores() {
+    document.querySelector("#scores-level1 tbody").innerHTML = "";
+    document.querySelector("#scores-level2 tbody").innerHTML = "";
     let length = 10;
     let individualScore = JSON.parse(localStorage.getItem('score'));
     let sortedList = individualScore.score.sort((a, b) => {
         if (a[3] - b[3] === 0) {
             return a[2] - b[2];
         } else {
-            return a[3] - b[3];
+            return b[3] - a[3];
         }
     })
     if(sortedList.length<10){
