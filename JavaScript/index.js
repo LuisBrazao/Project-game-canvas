@@ -316,10 +316,10 @@ function updateCanvas() {
         currentGame.player.vy -= 50;
         currentGame.player.jumping = true;
     } else if (controller.left) {
-        currentGame.player.vx = -7;
+        currentGame.player.vx = -5;
         currentGame.player.setImage("./images/standing-left.png");
     } else if (controller.right) {
-        currentGame.player.vx = 7;
+        currentGame.player.vx = 5;
         currentGame.player.setImage("./images/standing-right.png");
     } else {
         currentGame.player.jumping = true;
